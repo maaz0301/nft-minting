@@ -43,10 +43,7 @@ const DashNavbar = ({ userName = "Alice", profileImg }) => {
         <h1 className="text-lg sm:text-xl font-semibold">
           Welcome back, {userName}!
         </h1>
-        {/* <p className="text-xs sm:text-sm text-[#6cdb7e]">
-          Solana Address: <span className="text-white">0x7f...3d4a</span>
-          <span className="text-green-400 ml-1">(connected wallet)</span>
-        </p> */}
+       
       </div>
 
       {/* Right Section */}
@@ -98,7 +95,7 @@ const DashNavbar = ({ userName = "Alice", profileImg }) => {
           </div>
           <div className="flex flex-col text-sm">
             <span className="font-medium truncate">{userName}</span>
-            <span className="text-gray-300 text-xs truncate">alice@gmail.com</span>
+            <span className="text-[#676f7a] text-xs truncate">alice@gmail.com</span>
           </div>
         </div>
 
