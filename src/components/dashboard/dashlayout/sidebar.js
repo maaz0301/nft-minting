@@ -11,9 +11,10 @@ import Logo from "../../../../public/assets/icons/BabyCatwif.svg";
 // Icons
 import HomeIcon from "../../../../public/assets/icons/home.svg";
 import NFTIcon from "../../../../public/assets/icons/nfts.svg";
-import RafflesIcon from "../../../../public/assets/icons/raffles.svg";
-import EarningsIcon from "../../../../public/assets/icons/earnings.svg";
-
+import userIcon from "../../../../public/assets/icons/usermanagement.svg"
+import RafflesIcon from "../../../../public/assets/icons/fund.svg";
+import EarningsIcon from "../../../../public/assets/icons/earningOverview.svg";
+import BatchIcon from "../../../../public/assets/icons/batch-control.svg";
 const menuItems = [
   {
     name: "Dashboard",
@@ -28,7 +29,7 @@ const menuItems = [
   {
     name: "User Management",
     path: "/dashboard/user-management",
-    icon: NFTIcon,
+    icon: userIcon,
   },
   {
     name: "Manage Fundraisers",
@@ -43,7 +44,7 @@ const menuItems = [
   {
     name: "Batch Control",
     path: "/dashboard/batchControl",
-    icon: EarningsIcon,
+    icon: BatchIcon,
   },
   {
     name: "Website",
@@ -96,11 +97,11 @@ const Sidebar = () => {
                 key={item.path}
                 onClick={() => handleNavigate(item.path)}
                 className={`flex items-center w-full px-4 py-2 rounded-lg transition-all duration-200 text-sm font-medium cursor-pointer font-[inter]
-                ${isActive ? "text-[#4184D6] bg-white/10" : "text-white hover:bg-white/5"}`}
+                ${isActive ? "text-[#4184D6] " : "text-white "}`}
               >
                 <span
                   className={`flex items-center justify-center w-10 h-10 rounded-full mr-3
-                  ${isActive ? "bg-[#4184D6]" : "bg-white/10"}`}
+                  ${isActive ? "bg-[#4184D6]" : ""}`}
                 >
                   <Image src={item.icon} alt={item.name} className="w-5 h-5" />
                 </span>

@@ -1,90 +1,13 @@
-// "use client";
 
-// import { useState } from "react";
-// import { Modal, Input, Button } from "antd";
-// import { CloseOutlined } from "@ant-design/icons";
-
-// const UpdateProfileModal = ({ visible, onClose }) => {
-//   const [fullName, setFullName] = useState("");
-//   const [email, setEmail] = useState("");
-
-//   const handleCancel = () => {
-//     // Reset input fields when closing the modal
-//     setFullName("");
-//     setEmail("");
-//     onClose();
-//   };
-
-//   const handleUpdate = () => {
-//     // Handle the profile update logic
-//     alert("Profile updated successfully!");
-//     onClose();
-//   };
-
-//   return (
-//     <Modal
-//       visible={visible}
-//       onCancel={handleCancel}
-//       footer={null}
-//       width={400}
-//       centered
-//       className=" bg-black/20 backdrop-blur-[80px] w-full rounded-[22px] p-6  shadow-lg text-white"
-//       closeIcon={<CloseOutlined style={{ color: "red" }} />}
-//     >
-//       <h2 className="text-2xl font-semibold mb-6">Update Profile</h2>
-
-//       <div className="mb-4">
-//         <label htmlFor="fullName" className="text-sm font-medium">
-//           Full Name
-//         </label>
-//         <Input
-//           id="fullName"
-//           value={fullName}
-//           onChange={(e) => setFullName(e.target.value)}
-//           placeholder="Type here..."
-//           className="w-full bg-darkBlue text-white p-3 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-//         />
-//       </div>
-
-//       <div className="mb-6">
-//         <label htmlFor="email" className="text-sm font-medium">
-//           Email Address
-//         </label>
-//         <Input
-//           id="email"
-//           value={email}
-//           onChange={(e) => setEmail(e.target.value)}
-//           placeholder="Type here..."
-//           className="w-full bg-darkBlue text-white p-3 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-//         />
-//       </div>
-
-//       <div className="flex justify-end gap-4">
-//         <Button
-//           onClick={handleCancel}
-//           className="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
-//         >
-//           Cancel
-//         </Button>
-//         <Button
-//           onClick={handleUpdate}
-//           className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-//         >
-//           Update Information
-//         </Button>
-//       </div>
-//     </Modal>
-//   );
-// };
-
-// export default UpdateProfileModal;
 "use client";
 
 import { useState } from "react";
-import { Modal, Button } from "antd";
+import { Modal} from "antd";
 import { CloseOutlined } from "@ant-design/icons";
 import Image from "next/image";
 import Input from "@/components/shared/input";
+import ButtonGroup from "antd/es/button/button-group";
+import Button from "@/components/shared/button";
 
 const UpdateProfileModal = ({ visible, onClose }) => {
   const [fullName, setFullName] = useState("");
@@ -117,7 +40,7 @@ const UpdateProfileModal = ({ visible, onClose }) => {
       }
       footer={null}
       centered
-      closeIcon={<CloseOutlined style={{ color: "red" }} />}
+      // closeIcon={<CloseOutlined style={{ color: "red" }} />}
       style={{
         width: "fit-content", // outer modal width
       }}
@@ -163,20 +86,23 @@ const UpdateProfileModal = ({ visible, onClose }) => {
         />
       </div>
 
-      <div className="flex justify-end gap-4">
-        <Button
-          onClick={handleCancel}
-          className="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
-        >
-          Cancel
-        </Button>
-        <Button
-          onClick={handleUpdate}
-          className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-          Update Information
-        </Button>
-      </div>
+     
+       
+          <div className="flex justify-end items-center gap-3">
+          <Button
+             onClick={handleCancel}
+            className="text-white w-[100%] py-2 border-1 border-red-500 rounded-[8px]"
+            text={"Cancel"}
+          />
+
+          <Button
+            onClick={handleUpdate}
+            className="text-white w-[100%] py-2 bg-[#4184D6] rounded-[8px]"
+            text={"Update Information"}
+          />
+        
+        </div>
+      
     </Modal>
   );
 };

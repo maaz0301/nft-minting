@@ -5,11 +5,19 @@ import { Icon } from "@iconify/react";
 import UpdateProfileModal from "@/components/modals/updateProfile/updateProfile";
 import Input from "@/components/shared/input";
 import Button from "@/components/shared/button";
+import ChangePasswordModal from "@/components/modals/change-password/changePassword";
 
 const ProfileCard = () => {
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState("0x7f...3d4a");
   const [emailValue, setEmailValue] = useState("0x7f...3d4a");
+
+  // Password change state
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // To toggle password visibility
+  const [open, setOpen] = useState(false); // For Change Password Modal
+
+  const [modalVisible, setModalVisible] = useState(false);
 
   const handleEditClick = () => {
     setEditing((prev) => !prev);
@@ -23,17 +31,25 @@ const ProfileCard = () => {
     setEmailValue(e.target.value);
   };
 
-  const [modalVisible, setModalVisible] = useState(false);
-
   const showModal = () => setModalVisible(true);
   const closeModal = () => setModalVisible(false);
+
+  const handleChangePasswordClick = () => {
+    setOpen(true);
+  };
+
+  const handleSubmitPasswordChange = () => {
+    // Logic for submitting password change
+    console.log("Password changed:", password);
+    setOpen(false);
+  };
 
   return (
     <div className="flex flex-col items-center bg-[#025CB91A]/10 backdrop-blur-[80px] p-6 rounded-lg shadow-xl w-full">
       {/* Heading with back icon */}
       <div className="flex items-center gap-2 mb-6 w-full">
-         <Image src={'/assets/icons/backArrow.svg'} width={13} height={16}/>
-               <h2 className="text-xl font-semibold text-white">Profile</h2>
+        <Image src={"/assets/icons/backArrow.svg"} width={13} height={16} />
+        <h2 className="text-xl font-semibold text-white">Profile</h2>
       </div>
 
       {/* Profile Section */}
@@ -100,8 +116,38 @@ const ProfileCard = () => {
         </div>
       </div>
 
-      {/* Update Modal */}
+      {/* Change Password Section */}
+      <div className="flex  flex-col sm:flex-row items-center gap-3 w-full mb-6">
+        <div className="w-full max-w-3xl mb-4">
+          <label htmlFor="current-password" className="block text-sm text-white mb-2 font-[inter]">
+            Current Password
+          </label>
+          <Input
+            type={showPassword ? "text" : "password"}
+            id="current-password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full  bg-black/20 text-white py-2 border border-[#FFFFFF1A] rounded-[14px] focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="**************"
+            aria-labelledby="current-password"
+          />
+        </div>
+
+        <Button
+          onClick={handleChangePasswordClick}
+          className="text-white w-full max-w-[183px] py-3 bg-[#4184D6] rounded-[8px]"
+          text="Change Password"
+        />
+      </div>
+
+      {/* Modals */}
       <UpdateProfileModal visible={modalVisible} onClose={closeModal} />
+      <ChangePasswordModal
+        open={open}
+        onCancel={() => setOpen(false)}
+        onSubmit={handleSubmitPasswordChange}
+      />
+      
     </div>
   );
 };
