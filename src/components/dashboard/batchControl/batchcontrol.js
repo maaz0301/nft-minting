@@ -3,6 +3,7 @@ import React from 'react'
 import { useState } from 'react';
 import BatchOverviewTable from './batchOverviewTable';
 import BurnerNFTCard from './burnerNftCard';
+import SuccessScreen from '../success-screen/success';
 const BatchControlDashboard = () => {
     const [activeTab, setActiveTab] = useState('my');
   return (
@@ -26,6 +27,7 @@ const BatchControlDashboard = () => {
       {/* Conditional Rendering Based on Active Tab */}
       {activeTab === 'my' && <BatchOverviewTable/>} {/* ActiveTable for OG Cat NFT */}
       {activeTab === 'listed' && <BurnerNFTCard/>} {/* Breakdown for Burner NFT */}
+    <SuccessScreen/>
     </div>
     </div>
   )

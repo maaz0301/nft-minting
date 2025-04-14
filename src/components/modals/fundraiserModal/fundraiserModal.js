@@ -1,5 +1,7 @@
 'use client';
 
+
+import SuccessMessage from "@/components/dashboard/success-screen/success";
 import Button from "@/components/shared/button";
 import Input from "@/components/shared/input";
 import { Modal, Form } from "antd";
@@ -12,6 +14,11 @@ const FundraiserModal = ({ open, onCancel, onSubmit }) => {
   const handleFinish = (values) => {
     onSubmit(values);
     form.resetFields();
+  };
+  const [triggerSuccess, setTriggerSuccess] = useState(false);
+
+  const handleClick = () => {
+    setTriggerSuccess(true);
   };
 
   return (
@@ -121,15 +128,14 @@ const FundraiserModal = ({ open, onCancel, onSubmit }) => {
           />
 
           <Button
-            onClick={() => {
-              form.resetFields();
-              onCancel();
-            }}
+            onClick={handleClick}
             className="text-white w-[100%] py-2 bg-[#4184D6] rounded-[8px]"
             text={"Create Fundraiser"}
           />
         </div>
       </Form>
+     
+      <SuccessMessage trigger={triggerSuccess} message="Successfully Created!" />
     </Modal>
   );
 };
