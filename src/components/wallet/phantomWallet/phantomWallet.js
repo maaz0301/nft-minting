@@ -52,9 +52,9 @@ const PhantomWalletPage = () => {
           </label>
           <Input
             type="text"
-            value={walletAddress || "Not connected"}
-            className="w-full sm:w-[540px] bg-black/20 text-white flex justify-center border border-[#FFFFFF1A] rounded-[14px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-            readOnly
+            id="connectedAs"
+            labelClass="text-white"
+            className="w-full bg-black/20 text-white border border-[#FFFFFF1A] rounded-[14px] focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
 
           <label htmlFor="balance" className="text-sm font-medium text-white">
@@ -62,18 +62,16 @@ const PhantomWalletPage = () => {
           </label>
           <Input
             type="text"
-            value={balance === null ? "Loading..." : `${balance} SOL`}
-            className="w-full sm:w-[540px] bg-black/20 text-white flex justify-center border border-[#FFFFFF1A] rounded-[14px] focus:outline-none focus:ring-2 focus:ring-blue-500"
-            readOnly
+            id="balance"
+            labelClass="text-white"
+            className="w-full bg-black/20 text-white border border-[#FFFFFF1A] rounded-[14px] focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
         <Button
-          text={"Go To Home"}
-          className="bg-[#4184D6] w-full cursor-pointer text-white rounded-[12px] font-semibold max-w-[540px] gap-4 items-center px-4 py-4 transition duration-300"
-          onClick={() => {
-            router.push('/dashboard');
-          }}
+          text="Go To Home"
+          className="bg-[#4184D6] w-full text-white rounded-[12px] font-semibold px-4 py-3 transition duration-300 hover:bg-[#3572c1] max-w-[540px]"
+          onClick={() => router.push('/dashboard')}
         />
       </div>
     </div>

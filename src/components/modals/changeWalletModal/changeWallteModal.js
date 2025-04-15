@@ -62,51 +62,13 @@ const ChangeWalletModal = ({ open, onCancel, onSubmit }) => {
         </p>
 
         <div className="flex flex-col gap-3">
-          {/* {wallets.map((wallet) => (
-            <button
-              key={wallet.name}
-              onClick={() => setSelected(wallet.name)}
-              className={clsx(
-                "flex items-center gap-3 px-4 py-3 rounded-xl bg-white text-black text-base font-medium border transition-all",
-                selected === wallet.name ? "border-blue-500 shadow-md" : "border-transparent"
-              )}
-            >
-              <Image
-                src={wallet.icon}
-                alt="wallet icon"
-                width={24}
-                height={24}
-              />
-              {wallet.name}
-            </button>
-          ))}
-        </div>
-
-        <div className="flex justify-between items-center mt-8 gap-4">
-          <button
-            onClick={onCancel}
-            className="w-full py-2 text-white border border-red-500 rounded-[10px] bg-[#2D2D2D] hover:bg-red-600 hover:border-red-600 transition-all"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleUpdate}
-            disabled={!selected}
-            className={clsx(
-              "w-full py-2 text-white rounded-[10px] transition-all",
-              selected
-                ? "bg-[#4184D6] hover:bg-blue-600"
-                : "bg-[#4184D6]/50 cursor-not-allowed"
-            )}
-          >
-            Update Wallet
-          </button> */}
+     
           <Button
             text={'Phantom Wallet'}
             img={'/assets/icons/wallet.svg'}
             imgHeight={30}
             imgWidth={30}
-            className={'flex w-full gap-4 items-center bg-[#fff] px-6 py-4 rounded-[12px] border border-[#4184D6] transition-all'}
+            className={'flex w-full gap-4 items-center bg-[#fff] px-6 py-4 rounded-[12px] border border-[#4184D6] transition-all font-[Inter] text-sm font-medium'}
           />
 
           {/* Wallet Button 2 */}
@@ -115,7 +77,7 @@ const ChangeWalletModal = ({ open, onCancel, onSubmit }) => {
             img={'/assets/icons/wallet.svg'}
             imgHeight={30}
             imgWidth={30}
-            className={'flex w-full gap-4 items-center bg-[#fff] px-6 py-4 rounded-[12px] border border-[#4184D6] transition-all'}
+            className={'flex w-full gap-4 items-center bg-[#fff] px-6 py-4 rounded-[12px] border border-[#4184D6] transition-all font-[Inter] text-sm font-medium'}
           />
 
           {/* Wallet Button 3 */}

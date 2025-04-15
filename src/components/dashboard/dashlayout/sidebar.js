@@ -84,7 +84,7 @@ const Sidebar = () => {
       >
         {/* Logo */}
         <div className="flex justify-center mb-10">
-          <Image src={Logo} alt="Logo" className="w-32 h-auto" priority />
+        <Image src={Logo} alt="Logo" width={179} height={34} priority />
         </div>
         {/* <div className="glowing-background fixed top-0 left-0 w-full h-full pointer-events-none z-0"></div> */}
         {/* Navigation Menu */}

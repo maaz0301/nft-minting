@@ -45,7 +45,7 @@ const ProfileCard = () => {
   };
 
   return (
-    <div className="flex flex-col items-center bg-[#025CB91A]/10 backdrop-blur-[80px] p-6 rounded-lg shadow-xl w-full">
+    <div className="flex flex-col items-center bg-[#025CB91A]/10 backdrop-blur-[80px] border border-[#19E3D429]/16 bg-[#025CB91A]/10 rounded-[22px] p-6 rounded-lg shadow-xl w-full">
       {/* Heading with back icon */}
       <div className="flex items-center gap-2 mb-6 w-full">
         <Image src={"/assets/icons/backArrow.svg"} width={13} height={16} />
