@@ -103,6 +103,7 @@ background: linear-gradient(90deg, rgba(0,36,15,1) 0%, rgba(8,19,29,1) 35%, rgba
   color: white;
   font-size: 14px;
   font-weight: 500;
+  font-family: inter;
  
 }
 
@@ -235,11 +236,10 @@ background: linear-gradient(90deg, rgba(0,36,15,1) 0%, rgba(8,19,29,1) 35%, rgba
 
 /* styles.css or styles.module.scss */
 .change-password-modal .ant-modal-content {
-  background-color: rgba(0, 0, 0, 0.2); /* bg-black/20 */
+  background-color: rgba(0, 0, 0, 0.2); 
   backdrop-filter: blur(80px);        
-    /* backdrop-blur-[80px] */
-  border: 1px solid rgba(25, 227, 212, 0.16); /* border-[#19E3D4]/16 */
-  border-radius: 22px;                  /* rounded-[22px] */
+  border: 1px solid rgba(25, 227, 212, 0.16); 
+  border-radius: 22px;                 
 }
 
 .change-password-modal .ant-modal-header {
@@ -277,4 +277,14 @@ background: linear-gradient(90deg, rgba(0,36,15,1) 0%, rgba(8,19,29,1) 35%, rgba
 
 .create-fundraiser-modal .ant-modal-title {
   color: white; /* To maintain your white text */
+}
+
+
+.custom-box-modal {
+  border: 1px solid rgba(25, 227, 212, 0.16); /* #19E3D429 = rgba(25, 227, 212, 0.16) */
+  background-color: rgba(2, 92, 185, 0.10);    /* #025CB91A = rgba(2, 92, 185, 0.10) */
+  border-radius: 22px;
+}
+.modal-bg{
+  background-color: #041831;
 }
