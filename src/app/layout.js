@@ -1,5 +1,10 @@
+"use client"
 import React from "react";
 import { Geist, Geist_Mono } from "next/font/google";
+import { WalletProvider, ConnectionProvider } from '@solana/wallet-adapter-react';
+import { PhantomWalletAdapter } from '@solana/wallet-adapter-wallets';
+import { clusterApiUrl } from '@solana/web3.js';
+import { useMemo } from 'react';
 import { Inter } from "next/font/google";
 import "./style/globals.css";
 
@@ -20,21 +25,21 @@ const inter = Inter({
   display: "swap",
 });
 
-export const metadata = {
-  title: "Solspin",
-  description: "Write meta description here",
-  icons: {
-    icon: "/logo.svg",
-  },
-};
+
 
 export default function RootLayout({ children }) {
+  const network = 'devnet'; // You can change to 'mainnet-beta' or 'testnet'
+  const endpoint = useMemo(() => clusterApiUrl(network), [network]); // Set network endpoint
+  const wallets = useMemo(() => [new PhantomWalletAdapter()], []); // Use Phantom Wallet Adapter
+
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased`}
-      >
-        {children}
+      <body className={`${inter.variable} antialiased`}>
+        <ConnectionProvider endpoint={endpoint}>
+          <WalletProvider wallets={wallets} autoConnect>
+            {children}
+          </WalletProvider>
+        </ConnectionProvider>
       </body>
     </html>
   );

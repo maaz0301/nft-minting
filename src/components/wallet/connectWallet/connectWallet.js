@@ -1,25 +1,61 @@
-
-'use client'
+'use client';
 
 import { useState } from 'react';
-// import { useRouter } from 'next/router'; // Use Next.js router for navigation
-import { useRouter } from 'next/navigation';
-
-import Button from '@/components/shared/button';
+import { useRouter } from 'next/navigation'; // Use Next.js router for navigation
+import Button from '@/components/shared/button'; // Assuming Button component is available
 import Spinner from './spinner'; // Custom spinner component
 
 const ConnectWallet = () => {
   const [isLoading, setIsLoading] = useState(false); // Track loading state
   const router = useRouter(); // Next.js router for navigation
 
-  const handleConnectWallet = () => {
-    setIsLoading(true); // Show spinner while the process is going on
-    setTimeout(() => {
-      setIsLoading(false); // Hide spinner after 2 seconds
-      router.push('/phantomWallet'); // Navigate to Phantom Wallet page
-    }, 2000); // Simulate a 2-second delay for connecting wallet
+  const handleConnectWallet = async () => {
+    setIsLoading(true); // Show spinner while waiting for connection
+
+    // Check if Phantom Wallet is available in the window
+    if (window.solana && window.solana.isPhantom) {
+      try {
+        // Request wallet connection
+        const response = await window.solana.connect();
+
+        // After successful connection, hide loading spinner
+        setIsLoading(false);
+
+        // Optionally, you can store the public key or wallet information
+        console.log('Connected to Phantom wallet:', response.publicKey.toString());
+
+        // Navigate to a page to handle the Phantom wallet's connected state
+        router.push('/phantomWallet');
+      } catch (err) {
+        // Handle error if user rejects or something goes wrong
+        setIsLoading(false);
+        console.error('Failed to connect Phantom Wallet:', err);
+        alert('Failed to connect Phantom Wallet. Please try again.');
+      }
+    } else {
+      setIsLoading(false);
+      alert('Please install the Phantom wallet extension.');
+    }
   };
 
+  // Handler to open the Phantom Wallet extension
+  const handleOpenPhantom = () => {
+    if (window.solana && window.solana.isPhantom) {
+      // Open the Phantom Wallet extension window
+      window.solana.connect()
+        .then((response) => {
+          // If successfully connected, log public key and route to the next page
+          console.log('Connected to Phantom wallet:', response.publicKey.toString());
+          router.push('/phantomWallet');
+        })
+        .catch((err) => {
+          console.error('Failed to connect Phantom Wallet:', err);
+          alert('Failed to connect Phantom Wallet. Please try again.');
+        });
+    } else {
+      alert('Please install the Phantom wallet extension.');
+    }
+  };
   return (
     <div className="min-h-screen flex justify-center items-center">
       <div className="bg-[#062E38] w-[90%] sm:w-[80%] md:w-[70%] lg:w-[50%] xl:w-[40%] px-6 sm:px-12 py-12 flex flex-col justify-center items-center cursor-pointer rounded-[22px]">
@@ -38,6 +74,7 @@ const ConnectWallet = () => {
             imgHeight={30}
             imgWidth={30}
             className={'flex w-full gap-4 items-center bg-[#fff] px-6 py-4 rounded-[12px] border border-[#4184D6] transition-all'}
+            onClick={handleOpenPhantom} // Open Phantom wallet on click
           />
 
           {/* Wallet Button 2 */}

@@ -1,6 +1,9 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-    reactStrictMode: true,
-};
-
-export default nextConfig;
+// next.config.mjs
+export default {
+    images: {
+      domains: [
+        'solana-raffle.s3.us-east-1.amazonaws.com',
+        // Add other domains if needed
+      ],
+    },
+  };

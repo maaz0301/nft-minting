@@ -1,232 +1,215 @@
 'use client';
 
 import SetPriceModal from '@/components/modals/setPrice/setPriceModal';
-import { Table, Button } from 'antd';
-import { useState } from 'react';
+import { Table, Button, Spin, Alert } from 'antd';
+import axios from 'axios';
+import { useState, useEffect } from 'react';
+
+const BATCH_CONFIG = [
+  { number: 1, size: 30, defaultPrice: 500, range: '1-30' },
+  { number: 2, size: 10, defaultPrice: 750, range: '31-40' },
+  { number: 3, size: 10, defaultPrice: 1000, range: '41-50' },
+  { number: 4, size: 10, defaultPrice: 1250, range: '51-60' },
+  { number: 5, size: 10, defaultPrice: 1500, range: '61-70' },
+  { number: 6, size: 10, defaultPrice: 1750, range: '71-80' },
+  { number: 7, size: 10, defaultPrice: 2000, range: '81-90' },
+  { number: 8, size: 10, defaultPrice: 2250, range: '91-100' },
+];
+
+const fetchNFTData = async () => {
+  console.log('[API] Starting NFT data fetch...');
+  try {
+    const nftData = [];
+    let value = 1;
+
+    for (const batch of BATCH_CONFIG) {
+      const formattedBatch = String(batch.number).padStart(2, '0');
+      console.log(`[BATCH] Fetching batch ${formattedBatch} (${batch.range})`);
+
+      for (let i = 1; i <= batch.size; i++) {
+        console.log(`[NFT] Fetching ${formattedBatch}-${i}`);
+
+        const response = await axios.get(
+          `https://solana-raffle.s3.us-east-1.amazonaws.com/OG-Cat-Collection(Limited)/batch${formattedBatch}/jsons/OG_Cat_${value}.json`
+        );
+        nftData.push({
+          ...response.data,
+          batchNumber: formattedBatch,
+          defaultPrice: batch.defaultPrice,
+        });
+        value++;
+      }
+      console.log("value", value)
+    }
+
+    console.log('[API] Successfully fetched', nftData.length, 'NFT items');
+    return nftData;
+  } catch (error) {
+    console.error('[API] Error fetching NFT data:', error);
+    throw error;
+  }
+};
 
 const BatchOverviewTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [modalVisible, setModalVisible] = useState(false);
+  const [nftData, setNftData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [selectedBatch, setSelectedBatch] = useState(null);
+  const [prices, setPrices] = useState({});
 
-  const openModal = () => {
-    setModalVisible(true);
-  };
+  const generateBatches = (nfts) => {
+    console.log('[BATCH] Generating batches from', nfts.length, 'NFTs');
+    const batches = BATCH_CONFIG.map((config, index) => {
+      const batchNFTs = nfts.filter(nft => nft.batchNumber === String(config.number).padStart(2, '0'));
+      return {
+        key: config.number,
+        batchNumber: `Batch #${String(config.number).padStart(2, '0')}`,
+        range: config.range,
+        totalNFTs: config.size,
+        defaultPrice: config.defaultPrice,
+        price: prices[config.number] ?? config.defaultPrice,
+        status: index === 0 ? 'Active' : index === 1 ? 'Upcoming' : 'Inactive',
+        minted: `${batchNFTs.length} / ${config.size}`,
+      };
+    });
 
-  const closeModal = () => {
-    setModalVisible(false);
+    console.log('[BATCH] Generated batches:', batches);
+    return batches;
   };
 
   const handleSavePrice = (price) => {
-    // You can handle the saved price here
-    console.log('Price Saved:', price);
-    closeModal(); // Close the modal after saving the price
+    console.log('[PRICE] Saving for batch:', selectedBatch, 'Price:', price);
+    setPrices(prev => ({ ...prev, [selectedBatch]: price }));
+    setModalVisible(false);
   };
-  const pageSize = 5;
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchNFTData();
+        setNftData(data);
+      } catch (err) {
+        setError('Failed to load NFT data');
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
+  }, []);
 
   const columns = [
     {
       title: 'Batch #',
       dataIndex: 'batchNumber',
-      key: 'batchNumber',
       render: (text) => <span className="text-white">{text}</span>,
     },
     {
-      title: 'Total NFTs',
-      dataIndex: 'totalNFTs',
-      key: 'totalNFTs',
+      title: 'Range',
+      dataIndex: 'range',
       render: (text) => <span className="text-white">{text}</span>,
     },
     {
       title: 'Price (USDC)',
-      dataIndex: 'price',
-      key: 'price',
-      render: (text) => <span className="text-white">{text}</span>,
+      render: (_, record) => (
+        <span className="text-white">
+          ${record.price} USDC
+          {record.price !== record.defaultPrice &&
+            <span className="text-gray-400 ml-2">(Default: ${record.defaultPrice})</span>}
+        </span>
+      ),
     },
     {
       title: 'Status',
       dataIndex: 'status',
-      key: 'status',
-      render: (status) => {
-        let statusColor = 'bg-[#CF17421A] text-[#CF1742]';
-        if (status === 'Active') {
-          statusColor = 'bg-[#14E0881A] text-[#14E088]';
-        } else if (status === 'Upcoming') {
-          statusColor = 'bg-[#F08B111A] text-[#F08B11] ';
-        }
-
-        return (
-          <span className={` px-2 py-1 rounded-full ${statusColor}`
-          
-          }
-          style={{
-            // background: '#4184D6',
-            border: 'none',
-            // color: 'white',
-            text:'14px',
-            font:'inter',
-            width:'110px',
-             padding:'10px 10px'
-          }}>
-            {status}
-          </span>
-        );
-      },
+      render: (status) => (
+        <span className={`px-3 py-1 rounded-full ${status === 'Active' ? 'bg-green-500/20 text-green-500' :
+            status === 'Upcoming' ? 'bg-orange-500/20 text-orange-500' : 'bg-red-500/20 text-red-500'
+          }`}>
+          {status}
+        </span>
+      ),
     },
     {
       title: 'Minted',
       dataIndex: 'minted',
-      key: 'minted',
       render: (text) => <span className="text-white">{text}</span>,
     },
     {
       title: 'Actions',
-      dataIndex: 'actions',
-      key: 'actions',
       render: (_, record) => (
-        <div>
-          {record.status === 'Active' ? (
-            <Button type="primary"
-            
-            className="text-white font-medium px-6 py-1 rounded-[8px]"
-          style={{
-            background: '#4184D6',
-            border: 'none',
-            color: 'white',
-            width:'134px',
-             padding:'16px 32px'
+        <Button
+          type="primary"
+          className="bg-blue-600 hover:bg-blue-700 text-white"
+          onClick={() => {
+            setSelectedBatch(record.key);
+            setModalVisible(true);
           }}
-            >
-              Edit
-            </Button>
-          ) : (
-            <Button type="default" 
-            className="text-white font-medium rounded-[8px]"
-            style={{
-              background: '#4184D6',
-              border: 'none',
-              color: 'white',
-              width:'134px',
-               padding:'16px 32px'
-            }}
-            onClick={openModal}
-            >
-              Set Price
-            </Button>
-          )}
-        </div>
+        >
+          {prices[record.key] ? 'Adjust Price' : 'Set Price'}
+        </Button>
       ),
     },
   ];
 
-  const data = [
-    {
-      key: '1',
-      batchNumber: 'Batch #01',
-      totalNFTs: 30,
-      price: '12.00',
-      status: 'Active',
-      minted: '7 / 10',
-    },
-    {
-      key: '2',
-      batchNumber: 'Batch #02',
-      totalNFTs: 10,
-      price: '15.00',
-      status: 'Upcoming',
-      minted: '2 / 10',
-    },
-    {
-      key: '3',
-      batchNumber: 'Batch #03',
-      totalNFTs: 10,
-      price: 'Not Set',
-      status: 'Inactive',
-      minted: '0 / 10',
-    },
-    {
-      key: '4',
-      batchNumber: 'Batch #04',
-      totalNFTs: 10,
-      price: 'Not Set',
-      status: 'Inactive',
-      minted: '2 / 10',
-    },
-    {
-      key: '5',
-      batchNumber: 'Batch #05',
-      totalNFTs: 10,
-      price: 'Not Set',
-      status: 'Inactive',
-      minted: '0 / 10',
-    },
-    {
-      key: '6',
-      batchNumber: 'Batch #06',
-      totalNFTs: 10,
-      price: 'Not Set',
-      status: 'Inactive',
-      minted: '2 / 10',
-    },
-    {
-      key: '7',
-      batchNumber: 'Batch #07',
-      totalNFTs: 10,
-      price: 'Not Set',
-      status: 'Inactive',
-      minted: '0 / 10',
-    },
-    {
-      key: '8',
-      batchNumber: 'Batch #08',
-      totalNFTs: 10,
-      price: 'Not Set',
-      status: 'Inactive',
-      minted: '2 / 10',
-    },
-  ];
+  if (error) {
+    return <Alert message="Error" description={error} type="error" showIcon />;
+  }
 
   return (
-    <section className="py-6   rounded-[20px] border border-[#19E3D4]/10 shadow-md">
-      <h2 className="text-white text-xl font-semibold mb-4 px-6">Batch Overview</h2>
+    <section className="py-6 rounded-[20px] border border-cyan-500/10 bg-gray-900">
+      <h2 className="text-white text-xl font-semibold px-6 mb-6">Batch Overview</h2>
 
-      <div className="overflow-x-auto ">
-        <Table
-          columns={columns}
-          dataSource={data}
-          pagination={{
-            current: currentPage,
-            pageSize: pageSize,
-            total: data.length,
-            onChange: (page) => setCurrentPage(page),
-            position: ['bottomCenter'],
-            showSizeChanger: false,
-            itemRender: (current, type, originalElement) => {
-              if (type === 'prev') {
+      {loading ? (
+        <div className="text-center p-8">
+          <Spin size="large" tip="Loading..." />
+        </div>
+      ) : (
+        <div className="px-6 bg-transparent">
+          <Table
+            columns={columns}
+            dataSource={generateBatches(nftData)}
+            pagination={{
+              current: currentPage,
+              pageSize: 5,
+              hideOnSinglePage: true,
+              responsive: true,
+              showSizeChanger: false,
+              onChange: (page) => setCurrentPage(page),
+              itemRender: (current, type, originalElement) => {
+                if (type === 'prev') {
+                  return (
+                    <button className="bg-white text-black w-8 h-8 rounded-md">&lt;</button>
+                  );
+                }
+                if (type === 'next') {
+                  return (
+                    <button className="bg-white text-black w-8 h-8 rounded-md">&gt;</button>
+                  );
+                }
                 return (
-                  <button className="bg-white text-black w-8 h-8 rounded-md">&lt;</button>
+                  <button className="text-white w-8 h-8 rounded-md hover:bg-white/10">
+                    {current}
+                  </button>
                 );
               }
-              if (type === 'next') {
-                return (
-                  <button className="bg-white text-black w-8 h-8 rounded-md">&gt;</button>
-                );
-              }
-              return (
-                <button className="text-white w-8 h-8 rounded-md hover:bg-white/10">
-                  {current}
-                </button>
-              );
-            },
-          }}
-          bordered={false}
-          rowClassName={() => 'border-t border-[#19E3D4]/5'}
-          className="custom-ant-table bg-transparent text-white"
-        />
-      </div>
+            }}
+            bordered={false}
+            rowClassName={() =>
+              'bg-transparent hover:bg-gray-800/50 transition-colors border-t border-[#19E3D4]/5'
+            }
+            className="custom-ant-table text-white"
+          />
+        </div>
+      )}
+
       <SetPriceModal
         visible={modalVisible}
-        onCancel={closeModal}
+        onCancel={() => setModalVisible(false)}
         onSave={handleSavePrice}
+        initialPrice={selectedBatch ? prices[selectedBatch] : ''}
       />
     </section>
   );

@@ -272,7 +272,9 @@ background: linear-gradient(90deg, rgba(0,36,15,1) 0%, rgba(8,19,29,1) 35%, rgba
 .create-fundraiser-modal .ant-modal-header {
   background-color: transparent !important;
   border-bottom: none; /* Optional: remove bottom border */
-  padding-bottom: 0;    /* Optional: reduce space */
+  padding-bottom: 0;
+  font: size 100px !important;
+  padding: 20px !important;    /* Optional: reduce space */
 }
 
 .create-fundraiser-modal .ant-modal-title {
