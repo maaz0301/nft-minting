@@ -4,6 +4,7 @@ import Image from "next/image";
 import Button from "@/components/shared/button";
 import { useRouter } from 'next/navigation';
 import axios from "axios";
+import MintNFTAndSendUSDCButton from "@/components/shared/Mintnft";
 
 
 const BATCH_CONFIG = [
@@ -164,7 +165,7 @@ export default function NFTGallery() {
             </button>
           ))}
 
-
+          
 
         </div>
 

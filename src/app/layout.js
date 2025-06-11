@@ -27,6 +27,7 @@ const inter = Inter({
 
 
 
+
 export default function RootLayout({ children }) {
   const network = 'devnet'; // You can change to 'mainnet-beta' or 'testnet'
   const endpoint = useMemo(() => clusterApiUrl(network), [network]); // Set network endpoint
