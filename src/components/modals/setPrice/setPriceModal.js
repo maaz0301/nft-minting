@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal } from 'antd';
 import Button from '@/components/shared/button';
 import Input from '@/components/shared/input';
+import Image from 'next/image';
 
 const SetPriceModal = ({ visible, onCancel, onSave, initialPrice = '' }) => {
   const [price, setPrice] = useState(initialPrice.toString());
@@ -34,25 +35,29 @@ const SetPriceModal = ({ visible, onCancel, onSave, initialPrice = '' }) => {
 
   return (
     <Modal
-      title="Set Price"
+      title={<span className="text-white text-xl font-bold">Set Price</span>}
       open={visible}
       onCancel={onCancel}
       className="create-fundraiser-modal"
-      footer={null} // We control footer via JSX
-      styles={{
-        body: {
-          fontSize: 16,
-          padding: 20
-        }
-      }}
+      closeIcon={
+        <Image
+          src="/assets/icons/onclose.svg"
+          alt="close"
+          className="w-6 h-6 cursor-pointer"
+          width={24}
+          height={24}
+        />
+      }
+      footer={null}
       width={400}
       destroyOnClose
     >
+      <div className="border-b w-full border-[#19E3D4]/16 mb-6"></div>
       <div className="space-y-4">
         <div className="space-y-2">
           <label
             htmlFor="price-input"
-            className="block text-sm font-medium text-gray-700"
+            className="block text-sm font-medium text-white"
           >
             Set Price In USDC
           </label>
@@ -62,8 +67,7 @@ const SetPriceModal = ({ visible, onCancel, onSave, initialPrice = '' }) => {
             onChange={handlePriceChange}
             placeholder="Enter price (e.g., 10.5)"
             type="text"
-            inputMode="decimal"
-            className="w-full"
+            className="w-full bg-black/20 text-white border border-[#FFFFFF1A] rounded-[14px] focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           {!isValid && price.trim() !== '' && (
             <p className="text-red-500 text-xs mt-1">
@@ -74,16 +78,14 @@ const SetPriceModal = ({ visible, onCancel, onSave, initialPrice = '' }) => {
 
         <div className="flex justify-end gap-3 mt-6">
           <Button
-            type="button"
             onClick={onCancel}
-            className="px-4 py-2 border border-gray-300 text-gray-700"
+            className="text-white w-[100%] py-2 border-1 border-red-500 rounded-[8px]"
             text="Cancel"
           />
           <Button
-            type="button"
             onClick={handleSave}
-            className={`px-4 py-2 text-white ${
-              isValid ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'
+            className={`text-white w-[100%] py-2 rounded-[8px] ${
+              isValid ? 'bg-[#4184D6] hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'
             }`}
             text="Set Price"
             disabled={!isValid}

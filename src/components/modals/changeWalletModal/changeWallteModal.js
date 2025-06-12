@@ -3,36 +3,25 @@
 import { Modal } from "antd";
 import Image from "next/image";
 import { useState } from "react";
-import clsx from "clsx";
 import Button from "@/components/shared/button";
 import UpdateWalletModal from "../updatewallet/updatewalletModal";
 
-const wallets = [
-  { name: "Phantom Wallet", icon: "/assets/icons/wallet-icon.svg" },
-  { name: "Solflare Wallet", icon: "/assets/icons/wallet-icon.svg" },
-  { name: "Glow Wallet", icon: "/assets/icons/wallet-icon.svg" },
-];
-
 const ChangeWalletModal = ({ open, onCancel, onSubmit }) => {
   const [selected, setSelected] = useState('');
-  
-    const [isModalOpen, setIsModalOpen] = useState(false);
-  
-    const handleOpen = () => setIsModalOpen(true);
-    const handleClose = () => setIsModalOpen(false);
-  
-    const handleSubmit = (selectedWallet) => {
-      console.log("Selected wallet:", selectedWallet);
-      // Do your logic here — save to state or call an API
-      handleClose();
-    };
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleUpdate = () => {
-    if (selected) {
-      onSubmit(selected);
-    }
+  const handleOpen = () => setIsModalOpen(true);
+  const handleClose = () => setIsModalOpen(false);
+
+  const handleSubmit = (selectedWallet) => {
+    console.log("Selected wallet:", selectedWallet);
+    onSubmit(selectedWallet);
+    handleClose();
   };
 
+  const handleWalletSelect = (walletName) => {
+    setSelected(walletName);
+  };
 
   return (
     <Modal
@@ -50,7 +39,7 @@ const ChangeWalletModal = ({ open, onCancel, onSubmit }) => {
           height={24}
         />
       }
-    className="change-password-modal"
+      className="change-password-modal"
       title={<span className="text-white text-xl font-bold">Change Wallet</span>}
     >
       <div className="pt-2 pb-4">
@@ -62,13 +51,18 @@ const ChangeWalletModal = ({ open, onCancel, onSubmit }) => {
         </p>
 
         <div className="flex flex-col gap-3">
-     
+          {/* Wallet Button 1 */}
           <Button
             text={'Phantom Wallet'}
             img={'/assets/icons/wallet.svg'}
             imgHeight={30}
             imgWidth={30}
-            className={'flex w-full gap-4 items-center bg-[#fff] px-6 py-4 rounded-[12px] border border-[#4184D6] transition-all font-[Inter] text-sm font-medium'}
+            className={`flex w-full gap-4 items-center px-6 py-4 rounded-[12px] border transition-all font-[Inter] text-sm font-medium ${
+              selected === 'Phantom Wallet' 
+                ? 'bg-[#4184D6] text-white border-[#4184D6]' 
+                : 'bg-[#fff] text-black border-[#4184D6]'
+            }`}
+            onClick={() => handleWalletSelect('Phantom Wallet')}
           />
 
           {/* Wallet Button 2 */}
@@ -77,7 +71,12 @@ const ChangeWalletModal = ({ open, onCancel, onSubmit }) => {
             img={'/assets/icons/wallet.svg'}
             imgHeight={30}
             imgWidth={30}
-            className={'flex w-full gap-4 items-center bg-[#fff] px-6 py-4 rounded-[12px] border border-[#4184D6] transition-all font-[Inter] text-sm font-medium'}
+            className={`flex w-full gap-4 items-center px-6 py-4 rounded-[12px] border transition-all font-[Inter] text-sm font-medium ${
+              selected === 'Solflare Wallet' 
+                ? 'bg-[#4184D6] text-white border-[#4184D6]' 
+                : 'bg-[#fff] text-black border-[#4184D6]'
+            }`}
+            onClick={() => handleWalletSelect('Solflare Wallet')}
           />
 
           {/* Wallet Button 3 */}
@@ -86,35 +85,35 @@ const ChangeWalletModal = ({ open, onCancel, onSubmit }) => {
             img={'/assets/icons/wallet.svg'}
             imgHeight={30}
             imgWidth={30}
-            className={'flex w-full gap-4 items-center bg-[#fff] px-6 py-4 rounded-[12px] border border-[#4184D6] transition-all'}
+            className={`flex w-full gap-4 items-center px-6 py-4 rounded-[12px] border transition-all font-[Inter] text-sm font-medium ${
+              selected === 'Glow Wallet' 
+                ? 'bg-[#4184D6] text-white border-[#4184D6]' 
+                : 'bg-[#fff] text-black border-[#4184D6]'
+            }`}
+            onClick={() => handleWalletSelect('Glow Wallet')}
           />
         
-        <div className="flex  justify-end items-center gap-3">
-          <Button
-            onClick={() => {
-              form.resetFields();
-              onCancel();
-            }}
-            className={
-              " text-white w-[100%] py-2  border-1  border-red-500 rounded-[8px]"
-            }
-            text={"Cancel "}
-          />
+          <div className="flex justify-end items-center gap-3 mt-4">
+            <Button
+              onClick={onCancel}
+              className="text-white w-[100%] py-2 border-1 border-red-500 rounded-[8px]"
+              text="Cancel"
+            />
 
-          <Button
-            onClick={handleOpen}
-            className={" text-white w-[100%] py-2  bg-[#4184D6] rounded-[8px]"}
-            text={"Change Password"}
-          />
-
+            <Button
+              onClick={handleOpen}
+              className="text-white w-[100%] py-2 bg-[#4184D6] rounded-[8px]"
+              text="Connect Wallet"
+              disabled={!selected}
+            />
+          </div>
         </div>
-        </div> <UpdateWalletModal
-        open={isModalOpen}
-        onCancel={handleClose}
-        onSubmit={handleSubmit}
-      />
-      
-      
+        
+        <UpdateWalletModal
+          open={isModalOpen}
+          onCancel={handleClose}
+          onSubmit={handleSubmit}
+        />
       </div>
     </Modal>
   );
