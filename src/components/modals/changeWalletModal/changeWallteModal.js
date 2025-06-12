@@ -41,6 +41,7 @@ const ChangeWalletModal = ({ open, onCancel, onSubmit }) => {
       }
       className="change-password-modal"
       title={<span className="text-white text-xl font-bold">Change Wallet</span>}
+      }
     >
       <div className="pt-2 pb-4">
         <h2 className="text-white text-lg font-semibold mb-1">
